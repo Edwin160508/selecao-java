@@ -1,0 +1,8 @@
+CREATE TABLE empresa (
+	id BIGINT NOT NULL AUTO_INCREMENT,
+	bandeira VARCHAR(50) NOT NULL,
+    nome_fantasia VARCHAR(2) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL,
+    
+	PRIMARY KEY(id)
+);

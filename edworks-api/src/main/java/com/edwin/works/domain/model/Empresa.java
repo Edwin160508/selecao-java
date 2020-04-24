@@ -1,11 +1,30 @@
 package com.edwin.works.domain.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@Entity
 public class Empresa {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank
 	private String bandeira;
+	
+	@NotBlank
+	@Column(name = "nome_fantasia")
 	private String nomeFantasia;
-	private Long cnpj;
+	
+	@NotBlank
+	@Size(max = 10)
+	private String cnpj;
 	
 	public Long getId() {
 		return id;
@@ -25,10 +44,10 @@ public class Empresa {
 	public void setNomeFantasia(String nomeFantasia) {
 		this.nomeFantasia = nomeFantasia;
 	}
-	public Long getCnpj() {
+	public String getCnpj() {
 		return cnpj;
 	}
-	public void setCnpj(Long cnpj) {
+	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
 	@Override
