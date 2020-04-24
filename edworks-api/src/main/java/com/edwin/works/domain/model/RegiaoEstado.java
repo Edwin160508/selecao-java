@@ -1,13 +1,25 @@
 package com.edwin.works.domain.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(schema = "edworks", name = "regiao_estado")
 public class RegiaoEstado {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String regiao;
 	
+	@Column(name = "sigla_estado")
 	private String siglaEstado;
-	
+		
 	private String estado;
 
 	public Long getId() {
