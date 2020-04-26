@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edwin.works.api.event.RecursoCriadoEvent;
 import com.edwin.works.api.model.UsuarioInputModel;
 import com.edwin.works.api.model.UsuarioOutputModel;
-import com.edwin.works.domain.model.Usuario;
 import com.edwin.works.domain.service.UsuarioService;
 
 @RestController
@@ -62,9 +61,9 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> buscarPeloCodigo(@PathVariable Long id){
+	public ResponseEntity<UsuarioOutputModel> buscarPeloCodigo(@PathVariable Long id){
 		try {
-			return ResponseEntity.ok(service.buscarUsuarioPeloId(id));
+			return ResponseEntity.ok(service.toModel(service.buscarUsuarioPeloId(id)));
 		}catch(IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}

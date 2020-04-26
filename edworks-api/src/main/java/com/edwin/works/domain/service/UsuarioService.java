@@ -132,7 +132,7 @@ public class UsuarioService {
 		return usuarioEncontrado;
 	}
 	
-	private UsuarioOutputModel toModel(Usuario entity) {
+	public UsuarioOutputModel toModel(Usuario entity) {
 		return modelMapper.map(entity, UsuarioOutputModel.class);
 	}
 	private Usuario toEntity(UsuarioInputModel usuarioInput) {
