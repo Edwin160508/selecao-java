@@ -3,6 +3,7 @@ package com.edwin.works.domain.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -116,20 +117,16 @@ public class UsuarioService {
 		repository.delete(usuarioEncontrado);
 	}
 	
-	public List<UsuarioOutputModel> listar(){
-		return toCollectionModel(repository.findAll());
-	}
-	
-	public Usuario buscarUsuarioPeloId(Long id) {
-		return repository.findById(id).get();
+	public Optional<Usuario> buscarUsuarioPeloId(Long id) {		
+		return repository.findById(id);
 	}
 	
 	public Usuario verificaSeExiste(Long id) {
-		Usuario usuarioEncontrado = buscarUsuarioPeloId(id);
-		if(Objects.isNull(usuarioEncontrado)) {
+		Optional<Usuario> usuarioEncontrado = buscarUsuarioPeloId(id);
+		if(!usuarioEncontrado.isPresent()) {
 			throw new EmptyResultDataAccessException(1);
 		}
-		return usuarioEncontrado;
+		return usuarioEncontrado.get();
 	}
 	
 	public UsuarioOutputModel toModel(Usuario entity) {
@@ -139,7 +136,7 @@ public class UsuarioService {
 		return modelMapper.map(usuarioInput, Usuario.class);
 	}
 	
-	private List<UsuarioOutputModel> toCollectionModel(List<Usuario> entityList){
+	public List<UsuarioOutputModel> toCollectionModel(List<Usuario> entityList){
 		return entityList.stream()
 				.map(usuario -> toModel(usuario))
 				.collect(Collectors.toList());

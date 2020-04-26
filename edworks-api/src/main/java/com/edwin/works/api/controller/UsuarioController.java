@@ -1,6 +1,7 @@
 package com.edwin.works.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edwin.works.api.event.RecursoCriadoEvent;
 import com.edwin.works.api.model.UsuarioInputModel;
 import com.edwin.works.api.model.UsuarioOutputModel;
+import com.edwin.works.domain.model.Usuario;
+import com.edwin.works.domain.repository.UsuarioRepository;
 import com.edwin.works.domain.service.UsuarioService;
 
 @RestController
@@ -33,9 +36,12 @@ public class UsuarioController {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	@Autowired
+	private UsuarioRepository repository;
+	
 	@GetMapping
 	public ResponseEntity<List<UsuarioOutputModel>> listar(){
-		return ResponseEntity.ok(service.listar());
+		return ResponseEntity.ok(service.toCollectionModel(repository.findAll()));
 	}
 	
 	@PostMapping
@@ -47,11 +53,12 @@ public class UsuarioController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioOutputModel> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInputModel usuarioInput){
-		try {
+		Optional<Usuario> usuarioEncontrado = repository.findById(id);
+		if(usuarioEncontrado.isPresent()) {
 			return ResponseEntity.ok(service.salvar(id, usuarioInput));
-		}catch(IllegalArgumentException e) {
-			return ResponseEntity.notFound().build();
 		}
+		return ResponseEntity.notFound().build();
+		
 	}
 	
 	@DeleteMapping("/{id}")
@@ -62,11 +69,12 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioOutputModel> buscarPeloCodigo(@PathVariable Long id){
-		try {
-			return ResponseEntity.ok(service.toModel(service.buscarUsuarioPeloId(id)));
-		}catch(IllegalArgumentException e) {
-			return ResponseEntity.notFound().build();
+		Optional<Usuario> usuarioEncontrado = repository.findById(id);
+		if(usuarioEncontrado.isPresent()) {
+			return ResponseEntity.ok(service.toModel(usuarioEncontrado.get()));
 		}
+		return ResponseEntity.notFound().build();
+		
 	}
 		
 }
