@@ -36,14 +36,26 @@ public class UsuarioService {
 	private ModelMapper modelMapper;
 	
 	
-	public UsuarioOutputModel salvar(UsuarioInputModel usuarioInput) {//Retornar um UsuarioOutputModel
-		if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
-			return salvaUsuarioPermissoesAdmin(usuarioInput);
-		}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
-			return salvaUsuarioPermissoesPesquisa(usuarioInput);
+	public UsuarioOutputModel salvar(Long id, UsuarioInputModel usuarioInput) {
+		UsuarioOutputModel retorno = null;
+		if(Objects.isNull(id)) {
+			if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
+				retorno = salvaUsuarioPermissoesAdmin(usuarioInput);
+			}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
+				retorno = salvaUsuarioPermissoesPesquisa(usuarioInput);
+			}else {
+				throw new NegocioException("Perfil de usuário inválido.");
+			}
 		}else {
-			throw new NegocioException("Perfil de usuário inválido.");
+			if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
+				retorno = atualizaUsuarioPermissoesAdmin(id, usuarioInput);
+			}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
+				retorno = atualizaUsuarioPermissoesPesquisa(id,usuarioInput);
+			}else {
+				throw new NegocioException("Perfil de usuário inválido.");
+			}
 		}
+		return retorno;
 	}
 	
 	private UsuarioOutputModel salvaUsuarioPermissoesAdmin(UsuarioInputModel usuarioInput) {
@@ -102,22 +114,6 @@ public class UsuarioService {
 	public void remover(Long id) {
 		Usuario usuarioEncontrado = verificaSeExiste(id);
 		repository.delete(usuarioEncontrado);
-	}
-	
-	/*public Usuario atualizar(Long id, Usuario usuario) {		
-		Usuario usuarioEncontrado = buscarUsuarioPeloId(id);
-		BeanUtils.copyProperties(usuario, usuarioEncontrado);		
-		return repository.save(usuarioEncontrado);	
-	}*/
-	
-	public UsuarioOutputModel atualizar(Long id, UsuarioInputModel usuarioInput) {
-		if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
-			return atualizaUsuarioPermissoesAdmin(id, usuarioInput);
-		}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
-			return atualizaUsuarioPermissoesPesquisa(id, usuarioInput);
-		}else {
-			throw new NegocioException("Perfil de usuário inválido.");
-		}
 	}
 	
 	public List<UsuarioOutputModel> listar(){

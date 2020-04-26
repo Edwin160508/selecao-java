@@ -41,15 +41,15 @@ public class UsuarioController {
 	
 	@PostMapping
 	public ResponseEntity<UsuarioOutputModel> salvar(@RequestBody UsuarioInputModel usuarioInput,  HttpServletResponse response){	
-		UsuarioOutputModel usuarioSalvo = service.salvar(usuarioInput);
+		UsuarioOutputModel usuarioSalvo = service.salvar(null,usuarioInput);
 		publisher.publishEvent(new RecursoCriadoEvent(usuarioSalvo, response, usuarioSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<UsuarioOutputModel> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInputModel usuario){
+	public ResponseEntity<UsuarioOutputModel> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInputModel usuarioInput){
 		try {
-			return ResponseEntity.ok(service.atualizar(id, usuario));
+			return ResponseEntity.ok(service.salvar(id, usuarioInput));
 		}catch(IllegalArgumentException e) {
 			return ResponseEntity.notFound().build();
 		}
