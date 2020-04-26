@@ -1,9 +1,14 @@
 package com.edwin.works.domain.model;
 
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Permissao {
@@ -13,6 +18,9 @@ public class Permissao {
 	private Long id;
 	
 	private String descricao;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "permissao")
+	private Collection<UsuarioPermissao> usuariosPermissoes;
 
 	public Long getId() {
 		return id;
@@ -28,6 +36,14 @@ public class Permissao {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public Collection<UsuarioPermissao> getUsuariosPermissoes() {
+		return usuariosPermissoes;
+	}
+
+	public void setUsuariosPermissoes(Collection<UsuarioPermissao> usuariosPermissoes) {
+		this.usuariosPermissoes = usuariosPermissoes;
 	}
 
 	@Override

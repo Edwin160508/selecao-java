@@ -1,13 +1,12 @@
 package com.edwin.works.domain.model;
 
-import java.util.List;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Usuario {
@@ -21,10 +20,8 @@ public class Usuario {
 	
 	private String senha;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name="usuario_id")
-	, inverseJoinColumns = @JoinColumn(name="permissao_id"))
-	private List<Permissao> permissoes;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
+	private Collection<UsuarioPermissao> usuariosPermissoes;
 
 	public Long getId() {
 		return id;
@@ -58,12 +55,12 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public List<Permissao> getPermissoes() {
-		return permissoes;
+	public Collection<UsuarioPermissao> getUsuariosPermissoes() {
+		return usuariosPermissoes;
 	}
 
-	public void setPermissoes(List<Permissao> permissoes) {
-		this.permissoes = permissoes;
+	public void setUsuariosPermissoes(Collection<UsuarioPermissao> usuariosPermissoes) {
+		this.usuariosPermissoes = usuariosPermissoes;
 	}
 
 	@Override
