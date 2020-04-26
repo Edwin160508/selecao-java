@@ -39,6 +39,8 @@ public class UsuarioService {
 	public UsuarioOutputModel salvar(UsuarioInputModel usuarioInput) {//Retornar um UsuarioOutputModel
 		if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
 			return salvaUsuarioPermissoesAdmin(usuarioInput);
+		}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
+			return salvaUsuarioPermissoesPesquisa(usuarioInput);
 		}else {
 			throw new NegocioException("Perfil de usuário inválido.");
 		}
@@ -49,6 +51,17 @@ public class UsuarioService {
 		validaUsuarioEmailExistente(entity);	
 		Usuario usuarioSalvo = repository.save(entity);				
 		List<UsuarioPermissao> permissoesDoUsuario = permissoesAdmin(usuarioSalvo);
+		for(UsuarioPermissao p: permissoesDoUsuario) {
+			usuarioPermissaoRepository.save(p);
+		}								
+		return toModel(usuarioSalvo);
+	}
+	
+	private UsuarioOutputModel salvaUsuarioPermissoesPesquisa(UsuarioInputModel usuarioInput) {
+		Usuario entity = toEntity(usuarioInput);
+		validaUsuarioEmailExistente(entity);	
+		Usuario usuarioSalvo = repository.save(entity);				
+		List<UsuarioPermissao> permissoesDoUsuario = permissoesPesquisa(usuarioSalvo);
 		for(UsuarioPermissao p: permissoesDoUsuario) {
 			usuarioPermissaoRepository.save(p);
 		}								
@@ -94,7 +107,7 @@ public class UsuarioService {
 	
 	private List<UsuarioPermissao> permissoesAdmin(Usuario usuario) {
 		List<UsuarioPermissao> permissoesMapeadas = new ArrayList<>();
-		List<Permissao> listaPermissoes = permissaoRepository.findAll();
+		List<Permissao> listaPermissoes = carregaListaComTodasPermissoes();
 		for(int i=0; i<listaPermissoes.size(); i++) {
 			UsuarioPermissao userPermissao = new UsuarioPermissao();
 			userPermissao.setUsuario(usuario);
@@ -104,8 +117,23 @@ public class UsuarioService {
 		return permissoesMapeadas;
 		
 	}
+	private List<Permissao> carregaListaComTodasPermissoes(){
+		return permissaoRepository.findAll();
+	}
 	
-	private void permissoesPesquisador() {
-		
+	private List<Permissao> carregaListaPermissaoPesquisa(){
+		return permissaoRepository.findByDescricaoContaining("PESQUISAR");
+	}
+	
+	private List<UsuarioPermissao> permissoesPesquisa(Usuario usuario) {
+		List<UsuarioPermissao> permissoesMapeadas = new ArrayList<>();
+		List<Permissao> listaPermissoes = carregaListaPermissaoPesquisa();
+		for(int i=0; i<listaPermissoes.size(); i++) {
+			UsuarioPermissao userPermissao = new UsuarioPermissao();
+			userPermissao.setUsuario(usuario);
+			userPermissao.setPermissao(listaPermissoes.get(i));
+			permissoesMapeadas.add(userPermissao);
+		}
+		return permissoesMapeadas;
 	}
 }
