@@ -3,6 +3,7 @@ package com.edwin.works.domain.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -86,6 +87,10 @@ public class UsuarioService {
 		return repository.save(usuarioEncontrado);	
 	}
 	
+	public List<UsuarioOutputModel> listar(){
+		return toCollectionModel(repository.findAll());
+	}
+	
 	public Usuario buscarUsuarioPeloId(Long id) {
 		return repository.findById(id).get();
 	}
@@ -103,6 +108,12 @@ public class UsuarioService {
 	}
 	private Usuario toEntity(UsuarioInputModel usuarioInput) {
 		return modelMapper.map(usuarioInput, Usuario.class);
+	}
+	
+	private List<UsuarioOutputModel> toCollectionModel(List<Usuario> entityList){
+		return entityList.stream()
+				.map(usuario -> toModel(usuario))
+				.collect(Collectors.toList());
 	}
 	
 	private List<UsuarioPermissao> permissoesAdmin(Usuario usuario) {

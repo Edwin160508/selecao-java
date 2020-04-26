@@ -22,7 +22,6 @@ import com.edwin.works.api.event.RecursoCriadoEvent;
 import com.edwin.works.api.model.UsuarioInputModel;
 import com.edwin.works.api.model.UsuarioOutputModel;
 import com.edwin.works.domain.model.Usuario;
-import com.edwin.works.domain.repository.UsuarioRepository;
 import com.edwin.works.domain.service.UsuarioService;
 
 @RestController
@@ -31,16 +30,13 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService service;
-	
-	@Autowired
-	private UsuarioRepository repository;
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
 	@GetMapping
-	public ResponseEntity<List<Usuario>> listar(){
-		return ResponseEntity.ok(repository.findAll());
+	public ResponseEntity<List<UsuarioOutputModel>> listar(){
+		return ResponseEntity.ok(service.listar());
 	}
 	
 	@PostMapping
