@@ -1,15 +1,19 @@
 package com.edwin.works.api.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class UsuarioInputModel {
 
 	private Long id;
-	
+	@NotBlank
 	private String nome;
-	
+	@NotBlank
+	@Email
 	private String email;
-	
+	@NotBlank
 	private String senha;
-	
+	@NotBlank
 	private String perfil;
 
 	public Long getId() {
