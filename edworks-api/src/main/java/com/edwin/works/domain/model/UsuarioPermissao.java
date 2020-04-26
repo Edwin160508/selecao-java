@@ -29,7 +29,7 @@ public class UsuarioPermissao implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "permissao_id")
 	private Permissao permissao;
 

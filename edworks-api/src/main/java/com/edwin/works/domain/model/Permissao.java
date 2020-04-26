@@ -19,7 +19,7 @@ public class Permissao {
 	
 	private String descricao;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "permissao")
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "permissao")
 	private Collection<UsuarioPermissao> usuariosPermissoes;
 
 	public Long getId() {
