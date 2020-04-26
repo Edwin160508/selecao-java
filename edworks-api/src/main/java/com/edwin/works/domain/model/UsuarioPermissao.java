@@ -7,12 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
+
 @Table(name = "usuario_permissao", schema = "edworks")
+@Entity
+@IdClass(UsuarioPermissaoPK.class)
 public class UsuarioPermissao implements Serializable{
 
 	

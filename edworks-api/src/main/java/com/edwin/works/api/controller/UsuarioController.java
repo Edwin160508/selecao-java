@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edwin.works.api.event.RecursoCriadoEvent;
+import com.edwin.works.api.model.UsuarioInputModel;
+import com.edwin.works.api.model.UsuarioOutputModel;
 import com.edwin.works.domain.model.Usuario;
 import com.edwin.works.domain.repository.UsuarioRepository;
 import com.edwin.works.domain.service.UsuarioService;
@@ -42,9 +44,9 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario,  HttpServletResponse response){
-		Usuario usuarioSalvo = service.salvar(usuario);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, usuarioSalvo.getId()));
+	public ResponseEntity<UsuarioOutputModel> salvar(@RequestBody UsuarioInputModel usuarioInput,  HttpServletResponse response){	
+		UsuarioOutputModel usuarioSalvo = service.salvar(usuarioInput);
+		publisher.publishEvent(new RecursoCriadoEvent(usuarioSalvo, response, usuarioSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
 	}
 	
@@ -71,5 +73,5 @@ public class UsuarioController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+		
 }
