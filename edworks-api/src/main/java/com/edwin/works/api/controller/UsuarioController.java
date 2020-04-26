@@ -42,7 +42,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Usuario> salvar(Usuario usuario,  HttpServletResponse response){
+	public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario,  HttpServletResponse response){
 		Usuario usuarioSalvo = service.salvar(usuario);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, usuarioSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
