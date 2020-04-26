@@ -47,7 +47,7 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @Valid @RequestBody Usuario usuario){
+	public ResponseEntity<UsuarioOutputModel> atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioInputModel usuario){
 		try {
 			return ResponseEntity.ok(service.atualizar(id, usuario));
 		}catch(IllegalArgumentException e) {

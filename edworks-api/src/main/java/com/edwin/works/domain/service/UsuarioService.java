@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -58,9 +57,33 @@ public class UsuarioService {
 		return toModel(usuarioSalvo);
 	}
 	
+	private UsuarioOutputModel atualizaUsuarioPermissoesAdmin(Long id, UsuarioInputModel usuarioInput) {		
+		verificaSeExiste(id);
+		Usuario entity = toEntity(usuarioInput);
+		entity.setId(id);
+		Usuario usuarioSalvo = repository.save(entity);				
+		List<UsuarioPermissao> permissoesDoUsuario = permissoesAdmin(usuarioSalvo);
+		for(UsuarioPermissao p: permissoesDoUsuario) {
+			usuarioPermissaoRepository.save(p);
+		}								
+		return toModel(usuarioSalvo);
+	}
+	
 	private UsuarioOutputModel salvaUsuarioPermissoesPesquisa(UsuarioInputModel usuarioInput) {
 		Usuario entity = toEntity(usuarioInput);
 		validaUsuarioEmailExistente(entity);	
+		Usuario usuarioSalvo = repository.save(entity);				
+		List<UsuarioPermissao> permissoesDoUsuario = permissoesPesquisa(usuarioSalvo);
+		for(UsuarioPermissao p: permissoesDoUsuario) {
+			usuarioPermissaoRepository.save(p);
+		}								
+		return toModel(usuarioSalvo);
+	}
+	
+	private UsuarioOutputModel atualizaUsuarioPermissoesPesquisa(Long id, UsuarioInputModel usuarioInput) {
+		verificaSeExiste(id);
+		Usuario entity = toEntity(usuarioInput);
+		entity.setId(id);
 		Usuario usuarioSalvo = repository.save(entity);				
 		List<UsuarioPermissao> permissoesDoUsuario = permissoesPesquisa(usuarioSalvo);
 		for(UsuarioPermissao p: permissoesDoUsuario) {
@@ -81,10 +104,20 @@ public class UsuarioService {
 		repository.delete(usuarioEncontrado);
 	}
 	
-	public Usuario atualizar(Long id, Usuario usuario) {		
+	/*public Usuario atualizar(Long id, Usuario usuario) {		
 		Usuario usuarioEncontrado = buscarUsuarioPeloId(id);
 		BeanUtils.copyProperties(usuario, usuarioEncontrado);		
 		return repository.save(usuarioEncontrado);	
+	}*/
+	
+	public UsuarioOutputModel atualizar(Long id, UsuarioInputModel usuarioInput) {
+		if(usuarioInput.getPerfil().equalsIgnoreCase("ADMIN")) {			
+			return atualizaUsuarioPermissoesAdmin(id, usuarioInput);
+		}else if(usuarioInput.getPerfil().equalsIgnoreCase("PESQUISADOR")) {
+			return atualizaUsuarioPermissoesPesquisa(id, usuarioInput);
+		}else {
+			throw new NegocioException("Perfil de usuário inválido.");
+		}
 	}
 	
 	public List<UsuarioOutputModel> listar(){
