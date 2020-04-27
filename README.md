@@ -57,6 +57,8 @@ Caso você não manje de Angular, encorajamos que você nos envie a API. Claro, 
 * Envie e-mail sinalizando a entrega para o analista técnico que está te apoiando durante o desenvolvimento
 * Você possui 4 dias para entregar a atividade.
 
+### Chamadas para API
+** https://www.getpostman.com/collections/e3951896064c90aa378f
 
 
 
