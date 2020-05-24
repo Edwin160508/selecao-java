@@ -1,10 +1,7 @@
 package com.edwin.works.api.storage;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.edwin.works.api.model.Relatorio;
 import com.edwin.works.domain.exception.NegocioException;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 
 @Component
 public class CSV {
