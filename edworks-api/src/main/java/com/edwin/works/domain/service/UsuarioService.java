@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class UsuarioService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+	
 	
 	public UsuarioOutputModel salvar(Long id, UsuarioInputModel usuarioInput) {
 		UsuarioOutputModel retorno = null;
@@ -60,6 +64,7 @@ public class UsuarioService {
 	}
 	
 	private UsuarioOutputModel salvaUsuarioPermissoesAdmin(UsuarioInputModel usuarioInput) {
+//		encriptarSenhaUsuario(usuarioInput);
 		Usuario entity = toEntity(usuarioInput);
 		validaUsuarioEmailExistente(entity);	
 		Usuario usuarioSalvo = repository.save(entity);				
@@ -83,6 +88,7 @@ public class UsuarioService {
 	}
 	
 	private UsuarioOutputModel salvaUsuarioPermissoesPesquisa(UsuarioInputModel usuarioInput) {
+//		encriptarSenhaUsuario(usuarioInput);
 		Usuario entity = toEntity(usuarioInput);
 		validaUsuarioEmailExistente(entity);	
 		Usuario usuarioSalvo = repository.save(entity);				
@@ -92,6 +98,11 @@ public class UsuarioService {
 		}								
 		return toModel(usuarioSalvo);
 	}
+	
+//	private void encriptarSenhaUsuario(UsuarioInputModel usuarioInput) {		
+//		String senhaParaEmcriptar = usuarioInput.getSenha();
+//		usuarioInput.setSenha(passwordEncoder.encode(senhaParaEmcriptar));
+//	}
 	
 	private UsuarioOutputModel atualizaUsuarioPermissoesPesquisa(Long id, UsuarioInputModel usuarioInput) {
 		verificaSeExiste(id);
