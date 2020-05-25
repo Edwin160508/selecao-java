@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../usuario';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -9,7 +10,7 @@ import { Usuario } from '../usuario';
 export class UsuarioFormComponent implements OnInit {
 
   usuario: Usuario;
-  constructor() { 
+  constructor(private service:UsuarioService) { 
     this.usuario = new Usuario();
   }
 
@@ -17,12 +18,11 @@ export class UsuarioFormComponent implements OnInit {
   }
 
   salvar(){
-    console.log(this.usuario);
-    console.log(this.usuario.id);
-    console.log(this.usuario.nome);
-    console.log(this.usuario.email);
-    console.log(this.usuario.senha);
-    console.log(this.usuario.perfil);
+    this.service
+    .salvar(this.usuario)
+    .subscribe(response => {
+      console.log(response);
+    });
   }
 
 }
